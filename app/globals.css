@@ -1,0 +1,131 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------
+   Design tokens — Tailwind 4 config CSS-first (@theme).
+   Chaque variable génère les utilitaires correspondants :
+   --color-accent  ->  bg-accent / text-accent / border-accent ...
+--------------------------------------------------------------- */
+@theme {
+  /* Palette */
+  --color-ink: #0a0a0a;
+  --color-offwhite: #f4f6f7;
+  --color-accent: #5e7a8a;
+  --color-accent-light: #7a9aad;
+  --color-accent-dark: #3d5a6a;
+  --color-muted: #8a9099;
+  --color-line: #c8cdd2;
+
+  /* Typographie (variables injectées par next/font dans layout.tsx) */
+  --font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-brand: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
+
+  /* Rayons — 8px boutons, 12px cartes, 20px éléments larges */
+  --radius-btn: 8px;
+  --radius-card: 12px;
+  --radius-xl2: 20px;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* Compense la hauteur de la navbar sticky lors des sauts d'ancre */
+    scroll-padding-top: 5.5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-ink);
+    color: #ffffff;
+    font-family: var(--font-body);
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  /* Focus visible homogène sur tous les éléments interactifs (a11y) */
+  :focus-visible {
+    outline: 2px solid var(--color-accent-light);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background-color: var(--color-accent);
+    color: #ffffff;
+  }
+}
+
+@layer components {
+  /* Conteneur de page unique, utilisé par toutes les sections */
+  .container-page {
+    width: 100%;
+    max-width: 72rem;
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+  }
+
+  /* Apparition d'entrée, en CSS pur : utilisée au-dessus de la ligne de
+     flottaison (hero) pour que le texte soit peint immédiatement, sans
+     attendre l'hydratation de Framer Motion. */
+  .animate-rise {
+    animation: rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  /* Lien d'évitement : visible uniquement au focus clavier */
+  .skip-link {
+    position: absolute;
+    left: 1rem;
+    top: -100%;
+    z-index: 100;
+    border-radius: var(--radius-btn);
+    background-color: var(--color-accent);
+    padding: 0.75rem 1.25rem;
+    font-family: var(--font-display);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #ffffff;
+    transition: top 0.2s ease;
+  }
+  .skip-link:focus {
+    top: 1rem;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Respect strict de prefers-reduced-motion : on neutralise
+   les animations CSS et le smooth scroll. Framer Motion est
+   désactivé côté JS via useReducedMotion (voir components/ui/Reveal.tsx). */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
