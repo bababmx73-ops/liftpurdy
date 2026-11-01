@@ -9,12 +9,11 @@ export default function About() {
         <Reveal>
           <div className="relative aspect-4/5 overflow-hidden rounded-[20px] sm:aspect-3/4 lg:aspect-4/5">
             <Image
-              src="/images/coach.jpg"
+              src="/images/coach-portrait.jpg"
               alt="Baptiste, coach sportif à La Rochelle"
               fill
-              priority
               sizes="(min-width: 1024px) 45vw, 90vw"
-              className="object-cover"
+              className="object-cover object-[50%_30%]"
             />
           </div>
         </Reveal>

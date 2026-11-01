@@ -17,12 +17,25 @@ import { BOOKING_ANCHOR, TRANSFORMATIONS } from "@/lib/constants";
  * seule la rotation automatique et les contrôles sont de l'amélioration
  * progressive côté client.
  */
-const SLIDES = [
-  { src: "/images/coach.jpg", alt: "Baptiste, coach sportif à La Rochelle" },
+type Slide = {
+  src: string;
+  alt: string;
+  /** `object-position` CSS : quelle partie de la photo reste visible quand elle est rognée. */
+  position?: string;
+};
+
+const SLIDES: Slide[] = [
+  {
+    // Cadrée sur le haut pour garder la tête du coach et les lumières de la salle
+    // visibles sur écran large ; l'abscisse (70 %) évite de couper la tête sur mobile.
+    src: "/images/coach.jpg",
+    alt: "Baptiste, coach sportif à La Rochelle",
+    position: "70% 4%",
+  },
   ...TRANSFORMATIONS,
 ];
 
-const AUTOPLAY_MS = 5500;
+const AUTOPLAY_MS = 3500;
 
 export default function Hero() {
   const [active, setActive] = useState(0);
@@ -56,7 +69,7 @@ export default function Hero() {
           <div
             key={slide.src}
             aria-hidden={index !== active}
-            className={`absolute inset-0 transition-opacity duration-[1400ms] ease-out ${
+            className={`absolute inset-0 transition-opacity duration-[1000ms] ease-out ${
               index === active ? "opacity-100" : "opacity-0"
             }`}
           >
@@ -67,6 +80,7 @@ export default function Hero() {
               priority={index === 0}
               sizes="100vw"
               className="object-cover"
+              style={slide.position ? { objectPosition: slide.position } : undefined}
             />
           </div>
         ))}
